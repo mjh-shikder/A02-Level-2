@@ -4,11 +4,19 @@ import { initDB } from "./db";
 
 const port = config.port
 
-const main = () => {
-    app.listen(port, () => {
-        initDB();
-        console.log(`Example app listening on port ${port}`);
-    });
+const main = async() => {
+   try {
+       await initDB();
+
+        app.listen(port, () => {
+          initDB();
+          console.log(`Example app listening on port ${port}`);
+        });
+       
+   } catch (error) {
+    console.log(error);
+    
+   }
 }
     
 
