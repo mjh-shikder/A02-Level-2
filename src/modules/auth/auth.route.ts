@@ -5,5 +5,6 @@ const router = Router()
 export const authRouter = router
 
 router.post("/signup", authController.signup);
+router.post("/login", authController.login)
 
 
