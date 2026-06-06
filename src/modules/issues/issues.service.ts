@@ -1,23 +1,20 @@
 import { pool } from "../../db";
-import type { CreateIssuePayload } from "../../types"
-
+import type { CreateIssuePayload, UpdateIssuePayload } from "../../types";
 
 const createIssueIntoDB = async (payload: CreateIssuePayload) => {
-    const { title, description, type, reporter_id } = payload;
+  const { title, description, type, reporter_id } = payload;
 
-    const result = await pool.query(
-      `
+  const result = await pool.query(
+    `
         INSERT INTO issues (title, description, type, reporter_id)
      VALUES ($1, $2, $3, $4)
      RETURNING id, title, description, type, status, reporter_id, created_at, updated_at
         `,
-      [title, description, type, reporter_id],
-    );
-    
-    return result.rows[0];
-}
+    [title, description, type, reporter_id],
+  );
 
-
+  return result.rows[0];
+};
 
 const getAllIssuesFromDB = async (filters: {
   sort?: "newest" | "oldest";
@@ -75,7 +72,6 @@ const getAllIssuesFromDB = async (filters: {
   });
 };
 
-
 export const getSingleIssueFromDB = async (id: number) => {
   const result = await pool.query("SELECT * FROM issues WHERE id = $1", [id]);
   const issue = result.rows[0];
@@ -103,11 +99,39 @@ export const getRawIssueById = async (id: number) => {
   return result.rows[0] || null;
 };
 
+// update issue
+const updateIssueInDB = async (id: number, fields: UpdateIssuePayload) => {
+  const updates: string[] = [];
+  const queryParams: any[] = [];
+
+  for (const [key, value] of Object.entries(fields)) {
+    if (value !== undefined) {
+      queryParams.push(value);
+      updates.push(`${key} = $${queryParams.length}`);
+    }
+  }
+
+  if (updates.length === 0) {
+    const result = await pool.query("SELECT * FROM issues WHERE id = $1", [id]);
+    return result.rows[0];
+  }
+
+  queryParams.push(id);
+  const queryText = `
+    UPDATE issues
+    SET ${updates.join(", ")}, updated_at = NOW()
+    WHERE id = $${queryParams.length}
+    RETURNING id, title, description, type, status, reporter_id, created_at, updated_at
+  `;
+
+  const result = await pool.query(queryText, queryParams);
+  return result.rows[0];
+};
 
 export const issuesService = {
   createIssueIntoDB,
   getAllIssuesFromDB,
   getSingleIssueFromDB,
-  getRawIssueById, 
-
-}
+  getRawIssueById,
+  updateIssueInDB,
+};
