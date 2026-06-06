@@ -145,7 +145,57 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
 }
 
 
+// get single issu
+
+const getSingleIssue = async (
+  req: IAuthRequest,
+  res: Response,
+) => {
+  try {
+    const idParam = req.params.id;
+    if (!idParam || Array.isArray(idParam)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid issue ID",
+      });
+      return;
+    }
+
+    const id = parseInt(idParam, 10);
+    if (isNaN(id)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid issue ID",
+      });
+      return;
+    }
+
+    const issue = await issuesService.getSingleIssueFromDB(id);
+
+    if (!issue) {
+      res.status(404).json({
+        success: false,
+        message: "Issue not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Issue retrieved successfully",
+      data: issue,
+    });
+  } catch (error) {
+    console.error("Get single issue error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error retrieving issue",
+    });
+  }
+};
+
 export const issuesController = {
-    createIssue,
-    getAllIssues,
+  createIssue,
+  getAllIssues,
+  getSingleIssue,
 }
