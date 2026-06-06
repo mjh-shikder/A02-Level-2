@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../../config";
 
+
 const signup = async (req: Request, res: Response) => {
     try {
         const result = await authService.createUserIntoDB(req.body)
@@ -71,7 +72,7 @@ const login = async (req: Request, res: Response) => {
             role: user.role
         }
 
-        const token = jwt.sign(jwtPayload, config.secret as string, { expiresIn: config.jwtExpiresIn as string });
+        const token = jwt.sign(jwtPayload, config.secret as string, { expiresIn: config.jwtExpiresIn });
 
         const { password: _, ...userWithoutPassword } = user
         
