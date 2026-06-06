@@ -1,5 +1,6 @@
 import express, { type Request, type Response } from "express";
 import { authRouter } from "./modules/auth/auth.route";
+import { issueRouter } from "./modules/issues/issues.route";
 
 const app = express();
 
@@ -9,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // modules--
 app.use("/api/auth", authRouter);
-app.use("/api/issues", )
+app.use("/api/issues", issueRouter )
 
 
 // Root Route

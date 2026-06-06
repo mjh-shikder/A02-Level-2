@@ -79,7 +79,11 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
         });
 
     } catch (error) {
-        
+         console.error("Create issue error:", error);
+         res.status(500).json({
+           success: false,
+           message: "Internal server error during issue creation",
+         });
     }
 }
 
