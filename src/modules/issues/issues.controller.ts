@@ -87,9 +87,65 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
     }
 }
 
+// Get all issues
+const getAllIssues = async (req: IAuthRequest, res: Response) => {
+  
+  try {
+    const { sort = "newest", type, status } = req.query;
+    
+    if (sort !== "newest" && sort !== "oldest") {
+      res.status(400).json({
+        success: false,
+        message: "Sort query parameter must be 'newest' or 'oldest'",
+      });
+      return;
+    }
+
+    if (type && type !== "bug" && type !== "feature_request") {
+      res.status(400).json({
+        success: false,
+        message: "Type query parameter must be 'bug' or 'feature_request'",
+      });
+      return;
+    }
+
+    if (
+      status &&
+      status !== "open" &&
+      status !== "in_progress" &&
+      status !== "resolved"
+    ) {
+      res.status(400).json({
+        success: false,
+        message:
+          "Status query parameter must be 'open', 'in_progress', or 'resolved'",
+      });
+      return;
+    }
+
+    const issues = await issuesService.getAllIssuesFromDB({
+      sort: sort as "newest" | "oldest",
+      type: type as string,
+      status: status as string,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Issues retrieved successfully",
+      data: issues,
+    });
+
+  } catch (error) {
+     console.error("Get all issues error:", error);
+     res.status(500).json({
+       success: false,
+       message: "Internal server error retrieving issues",
+     });
+  }
+}
 
 
 export const issuesController = {
     createIssue,
-
+    getAllIssues,
 }
