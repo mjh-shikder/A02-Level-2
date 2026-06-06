@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { issuesController } from "./issues.controller";
-import { authenticateJWT } from "../../middlewares/auth.middleware";
+import { authenticateJWT, authorizeRoles } from "../../middlewares/auth.middleware";
 
 
 const router = Router();
@@ -9,3 +9,4 @@ router.post("/", authenticateJWT, issuesController.createIssue);
 router.get("/", issuesController.getAllIssues);
 router.get("/:id", issuesController.getSingleIssue);
 router.patch("/:id", authenticateJWT, issuesController.updateIssue);
+router.delete("/:id", authenticateJWT, authorizeRoles("maintainer"), issuesController.deleteIssue);

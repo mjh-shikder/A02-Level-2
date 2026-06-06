@@ -241,7 +241,6 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
         return;
       }
 
-      
       if (req.body.status !== undefined) {
         res.status(403).json({
           success: false,
@@ -334,9 +333,55 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
   }
 };
 
+// delete issue
+const deleteIssue = async (req: IAuthRequest, res: Response): Promise<void> => {
+  try {
+    const idParam = req.params.id;
+    if (!idParam || Array.isArray(idParam)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid issue ID",
+      });
+      return;
+    }
+
+    const id = parseInt(idParam, 10);
+    if (isNaN(id)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid issue ID",
+      });
+      return;
+    }
+
+    const issue = await issuesService.getRawIssueById(id);
+    if (!issue) {
+      res.status(404).json({
+        success: false,
+        message: "Issue not found",
+      });
+      return;
+    }
+
+    await issuesService.deleteIssueFromDB(id);
+
+    res.status(200).json({
+      success: true,
+      message: "Issue deleted successfully",
+    });
+  } catch (error) {
+    console.error("Delete issue error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error deleting issue",
+    });
+  }
+};
+
 export const issuesController = {
   createIssue,
   getAllIssues,
   getSingleIssue,
   updateIssue,
+  deleteIssue,
 };
