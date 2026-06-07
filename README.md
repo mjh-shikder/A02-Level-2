@@ -7,7 +7,7 @@ DevPulse is a robust, production-ready backend API built with Node.js, Express, 
 ---
 
 ## 🔗 Live URL
-* **Production API URL:** [https://a02-level-2.onrender.com/](https://a02-level-2.onrender.com/) *(Placeholder for deployment)*
+* **Production API URL:** [Live Link](https://a02-level-2.onrender.com/)
 * **API base route:** `/api`
 
 ---
