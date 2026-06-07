@@ -1,6 +1,7 @@
 import express, { type Request, type Response } from "express";
 import { authRouter } from "./modules/auth/auth.route";
 import { issueRouter } from "./modules/issues/issues.route";
+import globalErrorHandler from "./middlewares/globalErrorHandler";
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.get("/", (req : Request, res: Response) => {
 });
 
 
+// global error handler 
+app.use(globalErrorHandler)
 
 
 
