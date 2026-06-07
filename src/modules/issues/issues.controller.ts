@@ -14,11 +14,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Unauthorized: Missing user information",
       });
-      //
-      // res.status(401).json({
-      //   success: false,
-      //   message: "Unauthorized: Missing user information",
-      // });
+     
       return;
     }
 
@@ -28,11 +24,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Title is required and must be a string",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Title is required and must be a string",
-      // });
+     
       return;
     }
 
@@ -42,11 +34,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Title must not exceed 150 characters",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Title must not exceed 150 characters",
-      // });
+     
       return;
     }
 
@@ -60,11 +48,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Description is required and must be a string",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Description is required and must be a string",
-      // });
+      
       return;
     }
 
@@ -74,11 +58,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Description must be at least 20 characters long",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Description must be at least 20 characters long",
-      // });
+      
       return;
     }
 
@@ -88,11 +68,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Type must be either 'bug' or 'feature_request'",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Type must be either 'bug' or 'feature_request'",
-      // });
+     
       return;
     }
 
@@ -110,12 +86,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
       data: newIssue,
     });
 
-    // res.status(201).json({
-    //   success: true,
-    //   message: "Issue created successfully",
-    //   data: newIssue,
-
-    // });
+    
   } catch (error) {
     console.error("Create issue error:", error);
     sendResponse(res, {
@@ -124,10 +95,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
       message: "Internal server error during issue creation",
     });
 
-    // res.status(500).json({
-    //   success: false,
-    //   message: "Internal server error during issue creation",
-    // });
+    
   }
 };
 
@@ -142,11 +110,7 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Sort query parameter must be 'newest' or 'oldest'",
       });
-      ///
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Sort query parameter must be 'newest' or 'oldest'",
-      // });
+     
       return;
     }
 
@@ -156,11 +120,7 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Type query parameter must be 'bug' or 'feature_request'",
       });
-      ///
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Type query parameter must be 'bug' or 'feature_request'",
-      // });
+     
       return;
     }
 
@@ -176,12 +136,7 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
         message:
           "Status query parameter must be 'open', 'in_progress', or 'resolved'",
       });
-      ///
-      // res.status(400).json({
-      //   success: false,
-      //   message:
-      //     "Status query parameter must be 'open', 'in_progress', or 'resolved'",
-      // });
+      
       return;
     }
 
@@ -197,12 +152,7 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
       message: "Issues retrieved successfully",
       data: issues,
     });
-    //
-    // res.status(200).json({
-    //   success: true,
-    //   message: "Issues retrieved successfully",
-    //   data: issues,
-    // });
+    
   } catch (error) {
     console.error("Get all issues error:", error);
     sendResponse(res, {
@@ -210,11 +160,7 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
       success: false,
       message: "Internal server error retrieving issues",
     });
-    //
-    // res.status(500).json({
-    //   success: false,
-    //   message: "Internal server error retrieving issues",
-    // });
+  
   }
 };
 
@@ -230,11 +176,7 @@ const getSingleIssue = async (req: IAuthRequest, res: Response) => {
         message: "Invalid issue ID",
       });
 
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Invalid issue ID",
-      // });
+
       return;
     }
 
@@ -245,11 +187,7 @@ const getSingleIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Invalid issue ID",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Invalid issue ID",
-      // });
+      
       return;
     }
 
@@ -261,11 +199,7 @@ const getSingleIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Issue not found",
       });
-      //
-      // res.status(404).json({
-      //   success: false,
-      //   message: "Issue not found",
-      // });
+      
       return;
     }
 
@@ -275,12 +209,7 @@ const getSingleIssue = async (req: IAuthRequest, res: Response) => {
       message: "Issue retrieved successfully",
       data: issue,
     });
-    //
-    // res.status(200).json({
-    //   success: true,
-    //   message: "Issue retrieved successfully",
-    //   data: issue,
-    // });
+    
   } catch (error) {
     console.error("Get single issue error:", error);
     sendResponse(res, {
@@ -288,11 +217,7 @@ const getSingleIssue = async (req: IAuthRequest, res: Response) => {
       success: false,
       message: "Internal server error retrieving issue",
     });
-    //
-    // res.status(500).json({
-    //   success: false,
-    //   message: "Internal server error retrieving issue",
-    // });
+    
   }
 };
 
@@ -306,11 +231,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Invalid issue ID",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Invalid issue ID",
-      // });
+     
       return;
     }
 
@@ -321,11 +242,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Invalid issue ID",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Invalid issue ID",
-      // });
+     
       return;
     }
 
@@ -336,11 +253,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Unauthorized",
       });
-      //
-      // res.status(401).json({
-      //   success: false,
-      //   message: "Unauthorized",
-      // });
+     
       return;
     }
 
@@ -352,11 +265,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
         success: false,
         message: "Issue not found",
       });
-      //
-      // res.status(404).json({
-      //   success: false,
-      //   message: "Issue not found",
-      // });
+     
       return;
     }
 
@@ -369,11 +278,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Forbidden: You cannot modify other contributors' issues",
         });
-        //
-        // res.status(403).json({
-        //   success: false,
-        //   message: "Forbidden: You cannot modify other contributors' issues",
-        // });
+        
         return;
       }
 
@@ -384,11 +289,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: `Conflict: Issue is currently ${issue.status}. Only open issues can be modified by contributors.`,
         });
-        //
-        // res.status(409).json({
-        //   success: false,
-        //   message: `Conflict: Issue is currently ${issue.status}. Only open issues can be modified by contributors.`,
-        // });
+       
         return;
       }
 
@@ -398,11 +299,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Forbidden: Contributors cannot change issue status",
         });
-        //
-        // res.status(403).json({
-        //   success: false,
-        //   message: "Forbidden: Contributors cannot change issue status",
-        // });
+      
         return;
       }
     }
@@ -419,11 +316,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Title must be a non-empty string",
         });
-        //
-        // res.status(400).json({
-        //   success: false,
-        //   message: "Title must be a non-empty string",
-        // });
+       
         return;
       }
       if (title.length > 150) {
@@ -432,11 +325,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Title must not exceed 150 characters",
         });
-        //
-        // res.status(400).json({
-        //   success: false,
-        //   message: "Title must not exceed 150 characters",
-        // });
+       
         return;
       }
       updateData.title = title;
@@ -449,11 +338,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Description must be a non-empty string",
         });
-        //
-        // res.status(400).json({
-        //   success: false,
-        //   message: "Description must be a non-empty string",
-        // });
+        
         return;
       }
       if (description.length < 20) {
@@ -462,11 +347,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Description must be at least 20 characters long",
         });
-        //
-        // res.status(400).json({
-        //   success: false,
-        //   message: "Description must be at least 20 characters long",
-        // });
+       
         return;
       }
       updateData.description = description;
@@ -479,11 +360,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Type must be either 'bug' or 'feature_request'",
         });
-        //
-        // res.status(400).json({
-        //   success: false,
-        //   message: "Type must be either 'bug' or 'feature_request'",
-        // });
+       
         return;
       }
       updateData.type = type;
@@ -500,11 +377,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
           success: false,
           message: "Status must be 'open', 'in_progress', or 'resolved'",
         });
-        //
-        // res.status(400).json({
-        //   success: false,
-        //   message: "Status must be 'open', 'in_progress', or 'resolved'",
-        // });
+       
         return;
       }
       updateData.status = status;
@@ -518,12 +391,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
       message: "Issue updated successfully",
       data: updatedIssue,
     });
-    //
-    // res.status(200).json({
-    //   success: true,
-    //   message: "Issue updated successfully",
-    //   data: updatedIssue,
-    // });
+    
   } catch (error) {
     console.error("Update issue error:", error);
     sendResponse(res, {
@@ -531,11 +399,7 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
       success: false,
       message: "Internal server error during issue update",
     });
-    //
-    // res.status(500).json({
-    //   success: false,
-    //   message: "Internal server error during issue update",
-    // });
+    
   }
 };
 
@@ -549,11 +413,7 @@ const deleteIssue = async (req: IAuthRequest, res: Response): Promise<void> => {
         success: false,
         message: "Invalid issue ID",
       });
-      //
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Invalid issue ID",
-      // });
+      
       return;
     }
 
@@ -564,11 +424,7 @@ const deleteIssue = async (req: IAuthRequest, res: Response): Promise<void> => {
         success: false,
         message: "Invalid issue ID",
       });
-      ///
-      // res.status(400).json({
-      //   success: false,
-      //   message: "Invalid issue ID",
-      // });
+    
       return;
     }
 
@@ -579,11 +435,7 @@ const deleteIssue = async (req: IAuthRequest, res: Response): Promise<void> => {
         success: false,
         message: "Issue Not Found",
       });
-      ///
-      // res.status(404).json({
-      //   success: false,
-      //   message: "Issue not found",
-      // });
+      
       return;
     }
 
@@ -594,11 +446,7 @@ const deleteIssue = async (req: IAuthRequest, res: Response): Promise<void> => {
       success: true,
       message: "Issue deleted successfully",
     });
-    //
-    // res.status(200).json({
-    //   success: true,
-    //   message: "Issue deleted successfully",
-    // });
+    
   } catch (error) {
     console.error("Delete issue error:", error);
     sendResponse(res, {
@@ -606,11 +454,7 @@ const deleteIssue = async (req: IAuthRequest, res: Response): Promise<void> => {
       success: false,
       message: "Internal server error deleting issue",
     });
-    //
-    // res.status(500).json({
-    //   success: false,
-    //   message: "Internal server error deleting issue",
-    // });
+   
   }
 };
 

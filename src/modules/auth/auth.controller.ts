@@ -19,12 +19,7 @@ const signup = async (req: Request, res: Response) => {
           message: "User registered successfully",
           data: result.rows[0],
         });
-        //
-        // res.status(201).json({
-        //   success: true,
-        //   message: "User registered successfully",
-        //   data: result.rows[0]
-        // });
+        
 
 
     } catch (error) {
@@ -35,11 +30,7 @@ const signup = async (req: Request, res: Response) => {
           success: false,
           message: "Internal server error during registration",
         });
-        //
-        //  res.status(500).json({
-        //  success: false,
-        //  message: "Internal server error during registration",
-        //  });
+        
     }
 }
 
@@ -60,11 +51,7 @@ const login = async (req: Request, res: Response) => {
                   success: false,
                   message: "Email and Password are Required",
                 });
-            //
-            // res.status(400).json({
-            //     success: false,
-            //     message: "Email and Password are Required"
-            // })
+           
             return
         }
 
@@ -77,11 +64,7 @@ const login = async (req: Request, res: Response) => {
               success: false,
               message: "User not found",
             });
-            //
-            // res.status(404).json({
-            //     success: false, 
-            //     massage: "User not found"
-            // })
+            
             return;
         }
 
@@ -93,11 +76,7 @@ const login = async (req: Request, res: Response) => {
               success: false,
               message: "Invalid Password",
             });
-            //
-            // res.status(401).json({
-            //     success: false,
-            //     message: "Invalid password"
-            // })
+            
             return;
         }
 
@@ -120,16 +99,7 @@ const login = async (req: Request, res: Response) => {
             user: userWithoutPassword,
           },
         });
-        //
-        // res.status(200).json({
-        //     success: true,
-        //     message: "Login Successful",
-        //     data: {
-        //         token,
-        //         user: userWithoutPassword
-        //     }
-        // })
-
+        
     } catch (error) {
         console.log("Login error:", error);
         sendResponse(res, {
@@ -137,11 +107,7 @@ const login = async (req: Request, res: Response) => {
           success: false,
           message: "Internal server error during login",
         });
-        //
-        // res.status(500).json({
-        //     success: false,
-        //     message: "Internal server error during login"
-        // })
+       
         
     }
 }
