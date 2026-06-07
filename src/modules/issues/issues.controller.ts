@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { issuesService } from "./issues.service";
 import type { IAuthRequest } from "../../middlewares/auth.middleware";
+import sendResponse from "../../utility/sendResponse";
 
 const createIssue = async (req: IAuthRequest, res: Response) => {
   try {
@@ -66,17 +67,32 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
       reporter_id,
     });
 
-    res.status(201).json({
+    sendResponse(res, {
+      statusCode: 201,
       success: true,
       message: "Issue created successfully",
       data: newIssue,
     });
+
+    // res.status(201).json({
+    //   success: true,
+    //   message: "Issue created successfully",
+    //   data: newIssue,
+ 
+    // });
   } catch (error) {
     console.error("Create issue error:", error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: "Internal server error during issue creation",
+      
     });
+
+    // res.status(500).json({
+    //   success: false,
+    //   message: "Internal server error during issue creation",
+    // });
   }
 };
 
