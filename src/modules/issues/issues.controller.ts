@@ -78,7 +78,7 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
     //   success: true,
     //   message: "Issue created successfully",
     //   data: newIssue,
- 
+
     // });
   } catch (error) {
     console.error("Create issue error:", error);
@@ -86,7 +86,6 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
       statusCode: 500,
       success: false,
       message: "Internal server error during issue creation",
-      
     });
 
     // res.status(500).json({
@@ -102,18 +101,30 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
     const { sort = "newest", type, status } = req.query;
 
     if (sort !== "newest" && sort !== "oldest") {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Sort query parameter must be 'newest' or 'oldest'",
       });
+      ///
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Sort query parameter must be 'newest' or 'oldest'",
+      // });
       return;
     }
 
     if (type && type !== "bug" && type !== "feature_request") {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Type query parameter must be 'bug' or 'feature_request'",
       });
+      ///
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Type query parameter must be 'bug' or 'feature_request'",
+      // });
       return;
     }
 
@@ -123,11 +134,18 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
       status !== "in_progress" &&
       status !== "resolved"
     ) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message:
           "Status query parameter must be 'open', 'in_progress', or 'resolved'",
       });
+      ///
+      // res.status(400).json({
+      //   success: false,
+      //   message:
+      //     "Status query parameter must be 'open', 'in_progress', or 'resolved'",
+      // });
       return;
     }
 
@@ -137,17 +155,30 @@ const getAllIssues = async (req: IAuthRequest, res: Response) => {
       status: status as string,
     });
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: 200,
       success: true,
       message: "Issues retrieved successfully",
       data: issues,
     });
+    //
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Issues retrieved successfully",
+    //   data: issues,
+    // });
   } catch (error) {
     console.error("Get all issues error:", error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: "Internal server error retrieving issues",
     });
+    //
+    // res.status(500).json({
+    //   success: false,
+    //   message: "Internal server error retrieving issues",
+    // });
   }
 };
 
@@ -157,43 +188,75 @@ const getSingleIssue = async (req: IAuthRequest, res: Response) => {
   try {
     const idParam = req.params.id;
     if (!idParam || Array.isArray(idParam)) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid issue ID",
       });
+
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Invalid issue ID",
+      // });
       return;
     }
 
     const id = parseInt(idParam, 10);
     if (isNaN(id)) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid issue ID",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Invalid issue ID",
+      // });
       return;
     }
 
     const issue = await issuesService.getSingleIssueFromDB(id);
 
     if (!issue) {
-      res.status(404).json({
+      sendResponse(res, {
+        statusCode: 404,
         success: false,
         message: "Issue not found",
       });
+      //
+      // res.status(404).json({
+      //   success: false,
+      //   message: "Issue not found",
+      // });
       return;
     }
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: 200,
       success: true,
       message: "Issue retrieved successfully",
       data: issue,
     });
+    //
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Issue retrieved successfully",
+    //   data: issue,
+    // });
   } catch (error) {
     console.error("Get single issue error:", error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: "Internal server error retrieving issue",
     });
+    //
+    // res.status(500).json({
+    //   success: false,
+    //   message: "Internal server error retrieving issue",
+    // });
   }
 };
 
@@ -202,38 +265,62 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
   try {
     const idParam = req.params.id;
     if (!idParam || Array.isArray(idParam)) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid issue ID",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Invalid issue ID",
+      // });
       return;
     }
 
     const id = parseInt(idParam, 10);
     if (isNaN(id)) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid issue ID",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Invalid issue ID",
+      // });
       return;
     }
 
     const user = req.user;
     if (!user) {
-      res.status(401).json({
+      sendResponse(res, {
+        statusCode: 401,
         success: false,
         message: "Unauthorized",
       });
+      //
+      // res.status(401).json({
+      //   success: false,
+      //   message: "Unauthorized",
+      // });
       return;
     }
 
     // Check if issue exists
     const issue = await issuesService.getRawIssueById(id);
     if (!issue) {
-      res.status(404).json({
+      sendResponse(res, {
+        statusCode: 404,
         success: false,
         message: "Issue not found",
       });
+      //
+      // res.status(404).json({
+      //   success: false,
+      //   message: "Issue not found",
+      // });
       return;
     }
 
@@ -241,27 +328,45 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
     if (user.role === "contributor") {
       // Must be the owner
       if (issue.reporter_id !== user.id) {
-        res.status(403).json({
+        sendResponse(res, {
+          statusCode: 403,
           success: false,
           message: "Forbidden: You cannot modify other contributors' issues",
         });
+        //
+        // res.status(403).json({
+        //   success: false,
+        //   message: "Forbidden: You cannot modify other contributors' issues",
+        // });
         return;
       }
 
       //  check Issue status open
       if (issue.status !== "open") {
-        res.status(409).json({
+        sendResponse(res, {
+          statusCode: 409,
           success: false,
           message: `Conflict: Issue is currently ${issue.status}. Only open issues can be modified by contributors.`,
         });
+        //
+        // res.status(409).json({
+        //   success: false,
+        //   message: `Conflict: Issue is currently ${issue.status}. Only open issues can be modified by contributors.`,
+        // });
         return;
       }
 
       if (req.body.status !== undefined) {
-        res.status(403).json({
+        sendResponse(res, {
+          statusCode: 403,
           success: false,
           message: "Forbidden: Contributors cannot change issue status",
         });
+        //
+        // res.status(403).json({
+        //   success: false,
+        //   message: "Forbidden: Contributors cannot change issue status",
+        // });
         return;
       }
     }
@@ -273,17 +378,29 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
 
     if (title !== undefined) {
       if (typeof title !== "string" || title.trim() === "") {
-        res.status(400).json({
+        sendResponse(res, {
+          statusCode: 400,
           success: false,
           message: "Title must be a non-empty string",
         });
+        //
+        // res.status(400).json({
+        //   success: false,
+        //   message: "Title must be a non-empty string",
+        // });
         return;
       }
       if (title.length > 150) {
-        res.status(400).json({
+        sendResponse(res, {
+          statusCode: 400,
           success: false,
           message: "Title must not exceed 150 characters",
         });
+        //
+        // res.status(400).json({
+        //   success: false,
+        //   message: "Title must not exceed 150 characters",
+        // });
         return;
       }
       updateData.title = title;
@@ -291,17 +408,29 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
 
     if (description !== undefined) {
       if (typeof description !== "string" || description.trim() === "") {
-        res.status(400).json({
+        sendResponse(res, {
+          statusCode: 400,
           success: false,
           message: "Description must be a non-empty string",
         });
+        //
+        // res.status(400).json({
+        //   success: false,
+        //   message: "Description must be a non-empty string",
+        // });
         return;
       }
       if (description.length < 20) {
-        res.status(400).json({
+        sendResponse(res, {
+          statusCode: 400,
           success: false,
           message: "Description must be at least 20 characters long",
         });
+        //
+        // res.status(400).json({
+        //   success: false,
+        //   message: "Description must be at least 20 characters long",
+        // });
         return;
       }
       updateData.description = description;
@@ -309,10 +438,16 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
 
     if (type !== undefined) {
       if (type !== "bug" && type !== "feature_request") {
-        res.status(400).json({
+        sendResponse(res, {
+          statusCode: 400,
           success: false,
           message: "Type must be either 'bug' or 'feature_request'",
         });
+        //
+        // res.status(400).json({
+        //   success: false,
+        //   message: "Type must be either 'bug' or 'feature_request'",
+        // });
         return;
       }
       updateData.type = type;
@@ -324,10 +459,16 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
         status !== "in_progress" &&
         status !== "resolved"
       ) {
-        res.status(400).json({
+        sendResponse(res, {
+          statusCode: 400,
           success: false,
           message: "Status must be 'open', 'in_progress', or 'resolved'",
         });
+        //
+        // res.status(400).json({
+        //   success: false,
+        //   message: "Status must be 'open', 'in_progress', or 'resolved'",
+        // });
         return;
       }
       updateData.status = status;
@@ -335,17 +476,30 @@ const updateIssue = async (req: IAuthRequest, res: Response) => {
 
     const updatedIssue = await issuesService.updateIssueInDB(id, updateData);
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: 200,
       success: true,
       message: "Issue updated successfully",
       data: updatedIssue,
     });
+    //
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Issue updated successfully",
+    //   data: updatedIssue,
+    // });
   } catch (error) {
     console.error("Update issue error:", error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: "Internal server error during issue update",
     });
+    //
+    // res.status(500).json({
+    //   success: false,
+    //   message: "Internal server error during issue update",
+    // });
   }
 };
 
@@ -354,43 +508,73 @@ const deleteIssue = async (req: IAuthRequest, res: Response): Promise<void> => {
   try {
     const idParam = req.params.id;
     if (!idParam || Array.isArray(idParam)) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid issue ID",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Invalid issue ID",
+      // });
       return;
     }
 
     const id = parseInt(idParam, 10);
     if (isNaN(id)) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Invalid issue ID",
       });
+      ///
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Invalid issue ID",
+      // });
       return;
     }
 
     const issue = await issuesService.getRawIssueById(id);
     if (!issue) {
-      res.status(404).json({
+      sendResponse(res, {
+        statusCode: 404,
         success: false,
-        message: "Issue not found",
+        message: "Issue Not Found",
       });
+      ///
+      // res.status(404).json({
+      //   success: false,
+      //   message: "Issue not found",
+      // });
       return;
     }
 
     await issuesService.deleteIssueFromDB(id);
 
-    res.status(200).json({
+    sendResponse(res, {
+      statusCode: 200,
       success: true,
       message: "Issue deleted successfully",
     });
+    //
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Issue deleted successfully",
+    // });
   } catch (error) {
     console.error("Delete issue error:", error);
-    res.status(500).json({
+    sendResponse(res, {
+      statusCode: 500,
       success: false,
       message: "Internal server error deleting issue",
     });
+    //
+    // res.status(500).json({
+    //   success: false,
+    //   message: "Internal server error deleting issue",
+    // });
   }
 };
 

@@ -4,6 +4,7 @@ import { pool } from "../../db";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../../config";
+import sendResponse from "../../utility/sendResponse";
 
 
 const signup = async (req: Request, res: Response) => {
@@ -12,19 +13,33 @@ const signup = async (req: Request, res: Response) => {
         
         // console.log(result);
         
-        res.status(201).json({
+        sendResponse(res, {
+          statusCode: 201,
           success: true,
           message: "User registered successfully",
-          data: result.rows[0]
+          data: result.rows[0],
         });
+        //
+        // res.status(201).json({
+        //   success: true,
+        //   message: "User registered successfully",
+        //   data: result.rows[0]
+        // });
 
 
     } catch (error) {
-         console.error("Signup error:", error);
-         res.status(500).json({
-         success: false,
-         message: "Internal server error during registration",
-         });
+        console.error("Signup error:", error);
+        
+        sendResponse(res, {
+          statusCode: 500,
+          success: false,
+          message: "Internal server error during registration",
+        });
+        //
+        //  res.status(500).json({
+        //  success: false,
+        //  message: "Internal server error during registration",
+        //  });
     }
 }
 
@@ -40,29 +55,49 @@ const login = async (req: Request, res: Response) => {
 
 
         if (!email || typeof email !== "string" || !password || typeof password !== "string") {
-            res.status(400).json({
-                success: false,
-                message: "Email and Password are Required"
-            })
+                sendResponse(res, {
+                  statusCode: 400,
+                  success: false,
+                  message: "Email and Password are Required",
+                });
+            //
+            // res.status(400).json({
+            //     success: false,
+            //     message: "Email and Password are Required"
+            // })
             return
         }
 
 
         const user = await authService.findUserByEmail(email);
         if (!user) {
-            res.status(401).json({
-                success: false, 
-                massage: "User not found"
-            })
+
+            sendResponse(res, {
+              statusCode: 404,
+              success: false,
+              message: "User not found",
+            });
+            //
+            // res.status(404).json({
+            //     success: false, 
+            //     massage: "User not found"
+            // })
             return;
         }
 
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            res.status(401).json({
-                success: false,
-                message: "Invalid password"
-            })
+
+            sendResponse(res, {
+              statusCode: 401,
+              success: false,
+              message: "Invalid Password",
+            });
+            //
+            // res.status(401).json({
+            //     success: false,
+            //     message: "Invalid password"
+            // })
             return;
         }
 
@@ -76,21 +111,37 @@ const login = async (req: Request, res: Response) => {
 
         const { password: _, ...userWithoutPassword } = user
         
-        res.status(200).json({
-            success: true,
-            message: "Login Successful",
-            data: {
-                token,
-                user: userWithoutPassword
-            }
-        })
+        sendResponse(res, {
+          statusCode: 200,
+          success: true,
+          message: "Login Successful",
+          data: {
+            token,
+            user: userWithoutPassword,
+          },
+        });
+        //
+        // res.status(200).json({
+        //     success: true,
+        //     message: "Login Successful",
+        //     data: {
+        //         token,
+        //         user: userWithoutPassword
+        //     }
+        // })
 
     } catch (error) {
         console.log("Login error:", error);
-        res.status(500).json({
-            success: false,
-            message: "Internal server error during login"
-        })
+        sendResponse(res, {
+          statusCode: 500,
+          success: false,
+          message: "Internal server error during login",
+        });
+        //
+        // res.status(500).json({
+        //     success: false,
+        //     message: "Internal server error during login"
+        // })
         
     }
 }
