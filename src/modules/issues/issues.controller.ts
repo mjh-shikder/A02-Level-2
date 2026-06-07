@@ -9,26 +9,44 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
     const reporter_id = req.user?.id;
 
     if (!reporter_id) {
-      res.status(401).json({
+      sendResponse(res, {
+        statusCode: 401,
         success: false,
         message: "Unauthorized: Missing user information",
       });
+      //
+      // res.status(401).json({
+      //   success: false,
+      //   message: "Unauthorized: Missing user information",
+      // });
       return;
     }
 
     if (!title || typeof title !== "string" || title.trim() === "") {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Title is required and must be a string",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Title is required and must be a string",
+      // });
       return;
     }
 
     if (title.length > 150) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Title must not exceed 150 characters",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Title must not exceed 150 characters",
+      // });
       return;
     }
 
@@ -37,26 +55,44 @@ const createIssue = async (req: IAuthRequest, res: Response) => {
       typeof description !== "string" ||
       description.trim() === ""
     ) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Description is required and must be a string",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Description is required and must be a string",
+      // });
       return;
     }
 
     if (description.length < 20) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Description must be at least 20 characters long",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Description must be at least 20 characters long",
+      // });
       return;
     }
 
     if (!type || (type !== "bug" && type !== "feature_request")) {
-      res.status(400).json({
+      sendResponse(res, {
+        statusCode: 400,
         success: false,
         message: "Type must be either 'bug' or 'feature_request'",
       });
+      //
+      // res.status(400).json({
+      //   success: false,
+      //   message: "Type must be either 'bug' or 'feature_request'",
+      // });
       return;
     }
 
